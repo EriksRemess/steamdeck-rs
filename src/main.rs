@@ -145,7 +145,7 @@ fn main() {
         }
         loop {
             read_states(&device);
-            sleep(1000);
+            sleep(100);
         }
     };
 }
