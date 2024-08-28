@@ -28,22 +28,22 @@ const ACTIONS: [&str; 15] = [
     "flatpak run com.raggesilver.BlackBox",
 ];
 
-const ACTION_ICONS: [&str; 15] = [
-    "images/google.png",
-    "images/youtube.png",
-    "images/reddit.png",
-    "images/github.png",
-    "images/linkedin.png",
-    "images/twitter.png",
-    "images/instagram.png",
-    "images/facebook.png",
-    "images/amazon.png",
-    "images/ebay.png",
-    "images/netflix.png",
-    "images/youtube-music.png",
-    "images/twitch.png",
-    "images/teams.png",
-    "images/terminal.png",
+const ACTION_ICONS: [&[u8]; 15] = [
+    include_bytes!("../images/google.png"),
+    include_bytes!("../images/youtube.png"),
+    include_bytes!("../images/reddit.png"),
+    include_bytes!("../images/github.png"),
+    include_bytes!("../images/linkedin.png"),
+    include_bytes!("../images/twitter.png"),
+    include_bytes!("../images/instagram.png"),
+    include_bytes!("../images/facebook.png"),
+    include_bytes!("../images/amazon.png"),
+    include_bytes!("../images/ebay.png"),
+    include_bytes!("../images/netflix.png"),
+    include_bytes!("../images/youtube-music.png"),
+    include_bytes!("../images/twitch.png"),
+    include_bytes!("../images/teams.png"),
+    include_bytes!("../images/terminal.png"),
 ];
 
 fn get_device(vendor_id: u16, product_id: u16, usage: u16, usage_page: u16) -> Option<HidDevice> {
@@ -95,8 +95,8 @@ fn read_states(device: &HidDevice) {
 }
 
 fn set_key_image(device: &HidDevice, key: u8) {
-    let file_path = ACTION_ICONS[key as usize];
-    let img = get_image_data(file_path);
+    let img_data = ACTION_ICONS[key as usize];
+    let img = get_image_data(img_data);
     let mut page_number = 0;
     let mut bytes_remaining = img.len();
     while bytes_remaining > 0 {
@@ -122,8 +122,8 @@ fn set_key_image(device: &HidDevice, key: u8) {
     }
 }
 
-fn get_image_data(file_path: &str) -> Vec<u8> {
-    let img = image::open(file_path).unwrap();
+fn get_image_data(img_data: &[u8]) -> Vec<u8> {
+    let img = image::load_from_memory(img_data).unwrap();
     let (width, height) = img.dimensions();
     let crop_size = std::cmp::min(width, height); // Take the smallest dimension
     let x_offset = (width - crop_size) / 2;
