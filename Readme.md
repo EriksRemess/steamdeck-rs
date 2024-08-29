@@ -5,13 +5,13 @@ Simple utility daemon to set (currently) predefined icons[^1] and actions to Str
 ## Installation
 
 ```bash
-cargo install --git https://github.com/EriksRemess/streamdeck-rs.git streamdeck-rs
+cargo install --git https://github.com/EriksRemess/streamrs.git streamrs
 ```
 
 ## Usage
 
 ```bash
-streamdeck-rs &
+streamrs &
 ```
 
 [^1]: Icons from https://marketplace.elgato.com/product/hexaza-3d4ed1dc-bf33-4f30-9ecd-201769f10c0d
