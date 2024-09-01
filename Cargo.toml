@@ -6,3 +6,6 @@ edition = "2021"
 [dependencies]
 hidapi = "2.6.3"
 image = "0.25.2"
+
+[profile.release]
+strip = true
