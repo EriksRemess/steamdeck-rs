@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+ctrlc = "3.4.5"
 hidapi = "2.6.3"
 image = "0.25.2"
 

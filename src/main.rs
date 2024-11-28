@@ -9,19 +9,19 @@ use std::thread::sleep;
 use std::time::Duration;
 
 const ACTIONS: [&str; 15] = [
-    "xdg-open https://www.google.com",
-    "xdg-open https://www.youtube.com",
-    "xdg-open https://www.reddit.com",
-    "xdg-open https://www.github.com",
+    "open https://www.google.com",
+    "open https://www.youtube.com",
+    "open https://www.reddit.com",
+    "open https://www.github.com",
     "amixer set Capture toggle",
-    "xdg-open https://www.twitter.com",
-    "xdg-open https://www.instagram.com",
-    "xdg-open https://www.facebook.com",
-    "xdg-open https://www.amazon.com",
+    "open https://www.twitter.com",
+    "open https://www.instagram.com",
+    "open https://www.facebook.com",
+    "open https://www.amazon.com",
     "desklight",
-    "xdg-open https://www.netflix.com",
+    "open https://www.netflix.com",
     "/opt/microsoft/msedge/microsoft-edge --profile-directory=Default --app-id=cinhimbnkkaeohfgghhklpknlkffjgod '--app-url=https://music.youtube.com/?source=pwa'",
-    "xdg-open https://www.twitch.com",
+    "open https://www.twitch.com",
     "/opt/microsoft/msedge/microsoft-edge --profile-directory=Default --app-id=cifhbcnohmdccbgoicgdjpfamggdegmo '--app-url=https://teams.microsoft.com/v2/?clientType=pwa'",
     "flatpak run com.raggesilver.BlackBox",
 ];
@@ -54,8 +54,11 @@ fn get_device(vendor_id: u16, product_id: u16, usage: u16, usage_page: u16) -> O
             dev.usage_page(),
         ) == (vendor_id, product_id, usage, usage_page)
         {
-            if let Ok(device) = dev.open_device(&api) {
-                return Some(device);
+            match dev.open_device(&api) {
+                Ok(device) => {
+                  return Some(device);
+                },
+                Err(e) => eprintln!("Error: {:?}", e),
             }
         }
     }
@@ -135,6 +138,11 @@ fn get_image_data(img_data: &[u8]) -> Vec<u8> {
 }
 
 fn main() {
+    ctrlc::set_handler(move || {
+      println!("\nExiting...");
+      std::process::exit(0);
+    })
+    .expect("Error setting Ctrl-C handler");
     if let Some(device) = get_device(0x0fd9, 0x0080, 0x0001, 0x000c) {
         set_brightness(&device, 60);
         for i in 0..15 {
